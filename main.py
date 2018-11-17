@@ -1,7 +1,7 @@
 import feature_engineering as fe
 import svm_api as svm
 import numpy as np
-#import log_reg_api as log_reg
+import log_reg_api as log_reg
 #import knn_api as knn
 
 #Function to calculate accuracy
@@ -46,12 +46,13 @@ for i in range(epochs):
     svm_classifier.train(X_train, y_train)
     y_pred = svm_classifier.predict(X_test)
     svm_accuracies.append(accuracy_score(y_test, y_pred))
-'''
-    lr_classifier = LogisticRegression()
-    lr_classifier.fit(X_train, y_train)
+
+    lr_classifier = log_reg.LogisticRegression(learningRate=0.0001)
+    lr_classifier.train(X_train, y_train)
     y_pred = lr_classifier.predict(X_test)
     lr_accuracies.append(accuracy_score(y_pred, y_test))
 
+'''
     knn_classifier = KNeighborsClassifier(n_neighbors=20)
     knn_classifier.fit(X_train, y_train)
     y_pred = knn_classifier.predict(X_test)
@@ -59,5 +60,5 @@ for i in range(epochs):
 '''
 print("Average accuracy over "+str(epochs)+" epochs :")
 print("SVM    : ", str(np.mean(svm_accuracies)*100)+"%")
-print("LR-SGD : ", 0)#str(np.mean(lr_accuracies)*100)+"%")
+print("LR-SGD : ", str(np.mean(lr_accuracies)*100)+"%")
 print("KNN    : ", 0)#str(np.mean(knn_accuracies)*100)+"%")
