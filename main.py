@@ -2,7 +2,7 @@ import feature_engineering as fe
 import svm_api as svm
 import numpy as np
 import log_reg_api as log_reg
-#import knn_api as knn
+import knn_api as knn
 
 #Function to calculate accuracy
 def accuracy_score(y_test, y_pred):
@@ -26,7 +26,7 @@ feature_matrix = np.genfromtxt(basepath + 'Engineered_Features.csv', delimiter =
 
 print("Stage 2/2: Testing Classifiers SVM, KNN and Logistic Regression(SGD):")
 test_size = 0.2
-epochs = 1000
+epochs = 10000
 print("Stage 2/2: Number of epochs = ", epochs)
 print("Stage 2/2: Train - Test ratio: "+str((1 - test_size) * 100) + "% : "
                                                                        +str(test_size * 100) + "%")
@@ -52,13 +52,12 @@ for i in range(epochs):
     y_pred = lr_classifier.predict(X_test)
     lr_accuracies.append(accuracy_score(y_pred, y_test))
 
-'''
-    knn_classifier = KNeighborsClassifier(n_neighbors=20)
-    knn_classifier.fit(X_train, y_train)
-    y_pred = knn_classifier.predict(X_test)
+    knn_classifier = knn.KNN(k=5)
+    knn_classifier.train(X_train, X_test)
+    y_pred = knn_classifier.predict(X_test, y_train)
     knn_accuracies.append(accuracy_score(y_pred, y_test))
-'''
+
 print("Average accuracy over "+str(epochs)+" epochs :")
 print("SVM    : ", str(np.mean(svm_accuracies)*100)+"%")
 print("LR-SGD : ", str(np.mean(lr_accuracies)*100)+"%")
-print("KNN    : ", 0)#str(np.mean(knn_accuracies)*100)+"%")
+print("KNN    : ", str(np.mean(knn_accuracies)*100)+"%")
